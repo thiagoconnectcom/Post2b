@@ -37,6 +37,8 @@ export default function DragNDrop() {
     titulo: null,
     descricao: null,
   });
+  const { titulo, descricao } = inputEl.current;
+  
   const dragItem = useRef();
   const dragItemNode = useRef();
 
@@ -76,19 +78,21 @@ export default function DragNDrop() {
 
   const handleClose = () => setShow(false);
 
-  const handleAddTodo = () => {
-    const { titulo, descricao } = inputEl.current;
+  const handleAddTodo = (e) => {
+    e.preventDefault();
+
     setShow(false);
+
     data[0].items.unshift({
       titulo: titulo.value,
       descricao: descricao.value,
-      tag: tag.value,
+      tag: tag.value
     });
   };
 
   const handleDelete = (index) => {
-    alert(index)
-  }
+    console.log(index)
+  };
 
   if (data) {
     return (
@@ -138,7 +142,12 @@ export default function DragNDrop() {
                     </Card.Header>
                     <Card.Body>
                       <div className="d-flex justify-content-between align-items-center">
-                        {item.descricao} <FaTrash color="red" size={14} onClick={() => handleDelete(itemI)} />
+                        {item.descricao}{" "}
+                        <FaTrash
+                          color="red"
+                          size={14}
+                          onClick={() => handleDelete(itemI)}
+                        />
                       </div>
                     </Card.Body>
                   </Card>
@@ -152,30 +161,35 @@ export default function DragNDrop() {
             <Modal.Title>Criar novo tarefa</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form className="form-inline">
+            <Form className="form-inline" onSubmit={(e) => handleAddTodo(e)}>
               <Form.Label className="mr-sm-2">Titulo</Form.Label>
               <Form.Control
                 type="text"
+                required
                 ref={(el) => (inputEl.current.titulo = el)}
               />
               <Form.Label className="mr-sm-2">Descrição</Form.Label>
               <Form.Control
                 type="text"
+                required
                 ref={(el) => (inputEl.current.descricao = el)}
               />
               <Form.Label className="mr-sm-2">tag</Form.Label>
               <Select
                 onChange={(value) => setTag(value)}
+                isRequired
                 options={[
                   { value: "urgente", label: "Urgente" },
                   { value: "revisar", label: "Revisar" },
                 ]}
               />
-              <Modal.Footer>
-                <Button onClick={() => handleAddTodo()} variant="primary">
-                  Submit
-                </Button>
-              </Modal.Footer>
+              <div className="d-flex justify-content-end">
+                <input
+                  className="btn btn-primary mt-3"
+                  type="submit"
+                  value="submit"
+                />
+              </div>
             </Form>
           </Modal.Body>
         </Modal>
