@@ -38,7 +38,7 @@ export default function DragNDrop() {
     descricao: null,
   });
   const { titulo, descricao } = inputEl.current;
-  
+
   const dragItem = useRef();
   const dragItemNode = useRef();
 
@@ -82,23 +82,27 @@ export default function DragNDrop() {
     e.preventDefault();
 
     setShow(false);
-
-    data[0].items.unshift({
-      titulo: titulo.value,
-      descricao: descricao.value,
-      tag: tag.value
-    });
+    setData(
+      [...data],
+      data[0].items.unshift({
+        titulo: titulo.value,
+        descricao: descricao.value,
+        tag: tag.value,
+      })
+    );
   };
 
   const handleDelete = (index) => {
-    console.log(index)
+    console.log(index);
   };
 
-  if (data) {
-    return (
-      <React.Fragment>
-        <Row>
-          {data.map((grp, grpI) => (
+  console.log(data);
+
+  return (
+    <React.Fragment>
+      <Row>
+        {data.length > 0 &&
+          data.map((grp, grpI) => (
             <div
               key={grp.title}
               onDragEnter={
@@ -155,47 +159,44 @@ export default function DragNDrop() {
               ))}
             </div>
           ))}
-        </Row>
-        <Modal show={show} onHide={handleClose}>
-          <Modal.Header>
-            <Modal.Title>Criar novo tarefa</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form className="form-inline" onSubmit={(e) => handleAddTodo(e)}>
-              <Form.Label className="mr-sm-2">Titulo</Form.Label>
-              <Form.Control
-                type="text"
-                required
-                ref={(el) => (inputEl.current.titulo = el)}
+      </Row>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header>
+          <Modal.Title>Criar novo tarefa</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form className="form-inline" onSubmit={(e) => handleAddTodo(e)}>
+            <Form.Label className="mr-sm-2">Titulo</Form.Label>
+            <Form.Control
+              type="text"
+              required
+              ref={(el) => (inputEl.current.titulo = el)}
+            />
+            <Form.Label className="mr-sm-2">Descrição</Form.Label>
+            <Form.Control
+              type="text"
+              required
+              ref={(el) => (inputEl.current.descricao = el)}
+            />
+            <Form.Label className="mr-sm-2">tag</Form.Label>
+            <Select
+              onChange={(value) => setTag(value)}
+              isRequired
+              options={[
+                { value: "urgente", label: "Urgente" },
+                { value: "revisar", label: "Revisar" },
+              ]}
+            />
+            <div className="d-flex justify-content-end">
+              <input
+                className="btn btn-primary mt-3"
+                type="submit"
+                value="submit"
               />
-              <Form.Label className="mr-sm-2">Descrição</Form.Label>
-              <Form.Control
-                type="text"
-                required
-                ref={(el) => (inputEl.current.descricao = el)}
-              />
-              <Form.Label className="mr-sm-2">tag</Form.Label>
-              <Select
-                onChange={(value) => setTag(value)}
-                isRequired
-                options={[
-                  { value: "urgente", label: "Urgente" },
-                  { value: "revisar", label: "Revisar" },
-                ]}
-              />
-              <div className="d-flex justify-content-end">
-                <input
-                  className="btn btn-primary mt-3"
-                  type="submit"
-                  value="submit"
-                />
-              </div>
-            </Form>
-          </Modal.Body>
-        </Modal>
-      </React.Fragment>
-    );
-  } else {
-    return null;
-  }
+            </div>
+          </Form>
+        </Modal.Body>
+      </Modal>
+    </React.Fragment>
+  );
 }
