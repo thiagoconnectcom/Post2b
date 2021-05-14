@@ -162,7 +162,7 @@ export default function DragNDrop() {
       </Row>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header>
-          <Modal.Title>Criar novo tarefa</Modal.Title>
+          <Modal.Title>Criar nova tarefa</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form className="form-inline" onSubmit={(e) => handleAddTodo(e)}>
